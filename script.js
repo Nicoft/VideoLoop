@@ -3,10 +3,10 @@
 var player = 0;
 
 var sources = [
-	"https://s3.amazonaws.com/newnationcreation/lop.mp4",
-	"https://s3.amazonaws.com/newnationcreation/paints.mp4",
-	"https://s3.amazonaws.com/newnationcreation/yr.mp4",
-	"https://s3.amazonaws.com/newnationcreation/subaru.mp4"
+	["https://s3.amazonaws.com/newnationcreation/lop.mp4","https://s3.amazonaws.com/newnationcreation/lop.jpg"],
+	["https://s3.amazonaws.com/newnationcreation/yr.mp4","https://s3.amazonaws.com/newnationcreation/yr.jpg",],
+	["https://s3.amazonaws.com/newnationcreation/paints.mp4","https://s3.amazonaws.com/newnationcreation/paints.jpg",],
+	["https://s3.amazonaws.com/newnationcreation/subaru.mp4","https://s3.amazonaws.com/newnationcreation/subaru.jpg"],
 ];
 
 var increment = 0;
@@ -41,7 +41,8 @@ function onLoad() {
 
 
 
-		player.src = sources[increment];
+		player.src = sources[increment][0];
+		player.poster = sources[increment][1];
 		increment = (increment + 1) % sources.length;
 		console.log(0, increment)
 		
