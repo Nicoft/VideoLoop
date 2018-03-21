@@ -22,7 +22,6 @@ var slides = [{
 }]
 
 document.addEventListener('DOMContentLoaded', function onLoad () {
-  console.log('start')
   var timeout = 0
 
   var player1 = document.getElementById(ID.VIDEO_PLAYER_ONE)
@@ -30,19 +29,13 @@ document.addEventListener('DOMContentLoaded', function onLoad () {
   var players = [ player1, player2 ]
 
   let playingIndex = 0
-  let bufferingIndex = 1
 
   player1.poster = slides[playingIndex].poster
   player1.src = slides[playingIndex].url
 
-  player2.poster = slides[bufferingIndex].poster
-  player2.src = slides[bufferingIndex].url
-
   player1.addEventListener('ended', next)
 
-  console.log(players)
-
-  update()
+  next()
 
   function next () {
     // go back to begining of playlist if that was the last slide
@@ -80,9 +73,8 @@ document.addEventListener('DOMContentLoaded', function onLoad () {
   }
 
   function toggleVisibility () {
-    players.forEach(function player () {
-      player1.classList.toggle('hide')
-      player2.classList.toggle('hide')
+    players.forEach(function (player) {
+      player.classList.toggle('hide')
     })
   }
 })
