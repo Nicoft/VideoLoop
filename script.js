@@ -1,102 +1,85 @@
-'use strict';
+"use strict";
 
-var player = 0;
+var ID = {
+  VIDEO_PLAYER_ONE: "video-player-1",
+  VIDEO_PLAYER_TWO: "video-player-2"
+};
 
-var sources = [
-	["https://s3.amazonaws.com/newnationcreation/lop.mp4","https://s3.amazonaws.com/newnationcreation/lop.jpg"],
-	["https://s3.amazonaws.com/newnationcreation/yr.mp4","https://s3.amazonaws.com/newnationcreation/yr.jpg",],
-	["https://s3.amazonaws.com/newnationcreation/paints.mp4","https://s3.amazonaws.com/newnationcreation/paints.jpg",],
-	["https://s3.amazonaws.com/newnationcreation/subaru.mp4","https://s3.amazonaws.com/newnationcreation/subaru.jpg"],
-];
+var UPDATE_FREQUENCY = 2000;
 
-var increment = 0;
-var time = 7000;
+var slides = [{
+  "url": "https://s3.amazonaws.com/newnationcreation/warrior.mp4",
+  "poster": "https://s3.amazonaws.com/newnationcreation/warrior.jpg"
+}, {
+  "url": "https://s3.amazonaws.com/newnationcreation/paints.mp4",
+  "poster": "https://s3.amazonaws.com/newnationcreation/paints.jpg"
+}, {
+  "url": "https://s3.amazonaws.com/newnationcreation/tiff.mp4",
+  "poster": "https://s3.amazonaws.com/newnationcreation/tiff.jpg"
+}, {
+  "url": "https://s3.amazonaws.com/newnationcreation/lop.mp4",
+  "poster": "https://s3.amazonaws.com/newnationcreation/lop.jpg"
+}];
 
+document.addEventListener("DOMContentLoaded", function onLoad () {
+  var player1 = document.getElementById(ID.VIDEO_PLAYER_ONE);
+  var player2 = document.getElementById(ID.VIDEO_PLAYER_TWO);
+  var players = [ player1, player2 ];
 
+  let playingIndex = 0;
 
-document.addEventListener('DOMContentLoaded', onLoad);
+  player1.poster = slides[playingIndex].poster;
+  player1.src = slides[playingIndex].url;
 
+  player1.addEventListener("ended", next);
+  player2.addEventListener("ended", next);
 
+  next();
 
+  function next (e) {
+    if (e && !isActive(e.target)) return 0;
 
-function onLoad() {
-	
-	
-	player = document.getElementById("video-player");
-	
+    // go back to begining of playlist if that was the last slide
+    playingIndex = playingIndex + 1 === slides.length
+      ? 0
+      : playingIndex + 1;
 
+    update(playingIndex);
+  }
 
+  function update (playingIndex) {
+    toggleVisibility();
 
-	player.addEventListener('durationchange', function() {
-		    console.log('1 Duration change', player.duration);
-		    time = player.duration*1000;
-		    
-		    console.log("2 event trigger time:", time)
-		    console.log("3 loop time:", time)
-		window.setTimeout(videoLoop, time);
+    if (!isActive(player1)) {
+      setTimeout(changePlayer1, UPDATE_FREQUENCY);
+      player2.play();
+    } else {
+      setTimeout(changePlayer2, UPDATE_FREQUENCY);
+      player1.play();
+    }
+  }
 
-		
-		});
-	function videoLoop() {
+  function changePlayer1 () {
+    player1.poster = slides[playingIndex].poster;
+    player1.src = slides[playingIndex].url;
 
+    player1.load();
+  }
 
+  function changePlayer2 () {
+    player2.poster = slides[playingIndex].poster;
+    player2.src = slides[playingIndex].url;
 
-		player.src = sources[increment][0];
-		player.poster = sources[increment][1];
-		increment = (increment + 1) % sources.length;
-		console.log(0, increment)
-		
+    player2.load();
+  }
 
-	}
+  function toggleVisibility () {
+    players.forEach(function (player) {
+      player.classList.toggle("hide");
+    });
+  }
 
-
-	videoLoop();
-
-	
-	
-
-
-}
-
-
-
-
-
-
-
-
-
-
-// LOOP WITH FIXED TIMER
-// var player = 0;
-
-// var sources = [
-// 	"https://s3.amazonaws.com/newnationcreation/lop.mp4",
-// 	"https://s3.amazonaws.com/newnationcreation/paints.mp4",
-// 	"https://s3.amazonaws.com/newnationcreation/yr.mp4",
-// 	"https://s3.amazonaws.com/newnationcreation/subaru.mp4"
-// ];
-
-// var increment = 1;
-// var time = 7000;
-
-// function videoLoop() {
-
-// 	player.src = sources[increment];
-// 	increment = (increment + 1) % sources.length;
-// 	time = player.duration;
-// 	console.log(time)
-
-// }
-
-// document.addEventListener('DOMContentLoaded', onLoad);
-
-
-
-
-// function onLoad() {
-	
-// 	player = document.getElementById("video-player")
-
-// 	setInterval(videoLoop, time);
-// }
+  function isActive (player) {
+    return !player.classList.contains("hide");
+  }
+})
