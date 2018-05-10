@@ -1,1 +1,32 @@
+body {
+    display: block;
+    margin: 0px;
+}
 .hide {display:none}
+.video-container {
+    background-color: black;
+    position: relative;
+    background-size: cover;
+    background-position: 50% 50%;
+    height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+}
+.video-container video {
+    transform: translateX(-50%) translateY(-50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+}
+.content {
+	height:3000px;
+}
+video {
+	display: inline-block;
+    vertical-align: baseline;
+}
